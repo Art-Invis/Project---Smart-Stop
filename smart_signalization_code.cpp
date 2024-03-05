@@ -1,22 +1,22 @@
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 
-LiquidCrystal_I2C lcd(0x3F, 16, 2); // Адреса дисплею і розміри (16x2)
+LiquidCrystal_I2C lcd(0x3F, 16, 2); 
 
 const int greenLedPin = 9;
 const int redLedPin = 7;
 const int buzzerPin = 5;
-const int obstacleSensorPin = A0; // Використовуй A0 для аналогового піна
+const int obstacleSensorPin = A0; 
 const int distanceSensorTrigPin = 4;
 const int distanceSensorEchoPin = 3;
 
-const float criticalDistance = 10; // Критична відстань в метрах
-const int obstacleThreshold = 500; // Значення порогу для виявлення перешкоди
+const float criticalDistance = 10; 
+const int obstacleThreshold = 500; 
 
-bool obstacleSoundPlayed = false; // Флаг для слідкування, чи вже відтворювався звук при виявленні перешкоди
+bool obstacleSoundPlayed = false; 
 
-unsigned long lastMillis = 0; // Змінна для відстеження часу
-unsigned long buzzStartMillis = 0; // Час початку звукового сигналу
+unsigned long lastMillis = 0; 
+unsigned long buzzStartMillis = 0; 
 
 void setup() {
   pinMode(greenLedPin, OUTPUT);
@@ -26,10 +26,9 @@ void setup() {
   pinMode(distanceSensorTrigPin, OUTPUT);
   pinMode(distanceSensorEchoPin, INPUT);
 
-  Wire.begin();  // Додано ініціалізацію I2C для використання LCD-дисплею
-
-  lcd.init();  // Ініціалізація LCD-дисплею
-  lcd.backlight();  // Увімкнення підсвічування
+  Wire.begin();  
+  lcd.init();  
+  lcd.backlight();  
 
   lcd.begin(16, 2);
   lcd.print("  Safe move !");
@@ -39,7 +38,7 @@ void loop() {
   int obstacleValue = analogRead(obstacleSensorPin);
 
   if (obstacleValue < obstacleThreshold) {
-    // Якщо виявлено перешкоду, вимірюємо відстань
+    
     float distance = measureDistance();
 
     if (distance > criticalDistance) {
@@ -47,19 +46,18 @@ void loop() {
       activateGreenIndication();
       if (!obstacleSoundPlayed) {
         activateShortAlarm();
-        obstacleSoundPlayed = true; // Встановлюємо флаг, що звук вже відтворений
+        obstacleSoundPlayed = true; 
       }
     } else {
       displayCriticalDistance(distance);
       activateRedIndication();
       activateCriticalAlarm();
-      obstacleSoundPlayed = false; // Скидаємо флаг, щоб новий звук міг відтворитися
+      obstacleSoundPlayed = false; 
     }
   } else {
-    // Якщо перешкоди немає, виконуємо інші дії
     activateGreenIndication();
     displaySafeMovementMessage();
-    obstacleSoundPlayed = false; // Скидаємо флаг, щоб новий звук міг відтворитися
+    obstacleSoundPlayed = false; 
   }
 }
 
@@ -71,7 +69,7 @@ float measureDistance() {
   digitalWrite(distanceSensorTrigPin, LOW);
 
   float duration = pulseIn(distanceSensorEchoPin, HIGH);
-  return duration * 0.0343 / 2; // Перерахунок відстані з часу
+  return duration * 0.0343 / 2; 
 }
 
 void displaySafeDistance(float distance) {
@@ -105,11 +103,11 @@ void activateRedIndication() {
 }
 
 void activateShortAlarm() {
-  tone(buzzerPin, 1200, 200); // Короткий звуковий сигнал на 200 мс
+  tone(buzzerPin, 1200, 200);
 }
 
 void activateCriticalAlarm() {
-  tone(buzzerPin, 1000, 800); // Звуковий сигнал в критичних ситуаціях
+  tone(buzzerPin, 1000, 800); 
 }
 
 void displaySafeMovementMessage() {
