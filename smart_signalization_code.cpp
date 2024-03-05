@@ -119,6 +119,6 @@ void displaySafeMovementMessage() {
 void delayWithTimer(unsigned long duration) {
   unsigned long currentMillis = millis();
   while (millis() - currentMillis < duration) {
-    // Виконуємо інші дії, якщо потрібно
+    
   }
 }
